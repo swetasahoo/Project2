@@ -36,6 +36,7 @@ public class UserDaoImpl implements UserDao {
 	public boolean save(User user) {
 
 		try {
+			// Are you setting setInActive any where?  If not what is the use of this.
 			user.setActive();
 			sessionFactory.getCurrentSession().save(user);
 
@@ -68,7 +69,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public List<User> list() {
-
+                //Are you want to get all the users or only active users?
 		String hql = "from User";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		return query.list();
@@ -83,6 +84,8 @@ public class UserDaoImpl implements UserDao {
 		
 	}
 	
+	//What is different between this method and  get(String id)
+	//If the get method return null, it means use does not exist.
 	public boolean isUserExist(User user) {
 		String hql="from User where emailId='"+user.getEmailId()+"'";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
