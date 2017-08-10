@@ -46,6 +46,7 @@ public class User extends ResourceSupport implements Serializable {
 	}
 	
 	
+	//Always return true?  What is the use?
 	public boolean isActive() {
 		return  true;
 	}
