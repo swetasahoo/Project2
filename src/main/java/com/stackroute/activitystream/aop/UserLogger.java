@@ -24,6 +24,9 @@ public class UserLogger {
     public void logStartTime() throws Throwable {
         start= System.currentTimeMillis();
         // proceed = joinPoint.proceed();      
+	    //No SOPs  Use only logger
+	    
+	    //Also get method parameters and log it ( except password)
          System.out.println("Start time:"+start);   
     }
 
