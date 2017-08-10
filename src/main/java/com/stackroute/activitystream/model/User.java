@@ -20,7 +20,6 @@ public class User extends ResourceSupport implements Serializable {
 	@Id
 	private String	emailId;
 	private String	password;
-	transient private String cPassword;
 	private String	name;
 	private String address;
 	private boolean active;
@@ -65,17 +64,7 @@ public class User extends ResourceSupport implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getcPassword() {
-		return cPassword;
-	}
-
-	public void setcPassword(String cPassword) {
-		this.cPassword = cPassword;
-	}
-
-	
+	}	
 
 	public String getName() {
 		return name;

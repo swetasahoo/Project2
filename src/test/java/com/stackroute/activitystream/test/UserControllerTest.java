@@ -77,7 +77,7 @@ public class UserControllerTest {
 	@Test
 	public void testValidateUser_NoError() throws Exception {
 		User user=new User();
-		user.setEmailId("swe@gmail.com");
+		user.setEmailId("sweta@gmail.com");
 		user.setPassword("password");
 		
 		mockMvc.perform(post("http://localhost:9012/api/user/authenticate").content(asJsonString(user)).contentType(MediaType.APPLICATION_JSON)

@@ -16,9 +16,9 @@ public class UserLogger {
 
     
 	 long start;
-	 Object proceed;
+	private Object proceed;
 
-     long executionTime;
+    private long executionTime;
     
 @Before("execution(public * getAllUser())")
     public void logStartTime() throws Throwable {

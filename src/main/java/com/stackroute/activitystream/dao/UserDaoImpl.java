@@ -1,16 +1,19 @@
 package com.stackroute.activitystream.dao;
 
 import java.util.List;
-
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Expression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.stackroute.activitystream.dao.UserDao;
 import com.stackroute.activitystream.model.User;
+
 
 @Repository(value="userDAO")
 @Component
@@ -19,10 +22,10 @@ public class UserDaoImpl implements UserDao {
 
 	
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 
 	@Autowired
-	User user;
+	private User user;
 
 	public UserDaoImpl(SessionFactory sessionFactory) {
 
@@ -67,22 +70,28 @@ public class UserDaoImpl implements UserDao {
 	public List<User> list() {
 
 		String hql = "from User";
-
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-
 		return query.list();
 
 	}
 
 	public User validate(String emailId, String password) {
-	
-
-		String hql = "from User  where emailId= '" + emailId + "' and password = '" + password + "'";
-
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		 Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class);
+		    criteria.add(Expression.eq("emailId",emailId));
+		    criteria.add(Expression.eq("password", password));
+		    return (User) criteria.uniqueResult();
 		
-		return (User) query.uniqueResult();
-
+	}
+	
+	public boolean isUserExist(User user) {
+		String hql="from User where emailId='"+user.getEmailId()+"'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		if((User) query.uniqueResult()!=null)
+		{
+			return true;
+		}
+		
+		return false;
 	}
 
 }

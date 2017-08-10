@@ -36,8 +36,7 @@ public class UserController {
 
 	@Autowired
 	 User user;
-	@Autowired
-	RestTemplate restTemplate;
+	
 	
 	@GetMapping("/allusers")
 	public List getAllUser() {
@@ -54,34 +53,38 @@ public class UserController {
 	@RequestMapping(value="/getUser",method=RequestMethod.POST)
 	public ResponseEntity getUser(@RequestBody User user) {
 		
-		User user1=userDAO.get(user.getEmailId());
-		if (user1 == null) {
+		//User user1=userDAO.get(user.getEmailId());
+		if (userDAO.get(user.getEmailId()) == null) {
 			return new ResponseEntity<Object>("No User found for ID "+user.getEmailId(), HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<User>(user1, HttpStatus.OK);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 
 	@RequestMapping(value="/create",method=RequestMethod.POST)
 	public ResponseEntity createUser(@RequestBody User user) {
 
+		if(userDAO.isUserExist(user))
+		{
+			return new ResponseEntity(user.getEmailId()+" already Exist.", HttpStatus.NOT_FOUND);
+		}
 		userDAO.save(user);
-	
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 		
 	}
 	@RequestMapping(value="/authenticate",method=RequestMethod.POST)
-	public ResponseEntity<User> authenticateUser(@RequestBody User user)
+	public ResponseEntity<User> authenticateUser(@RequestBody User user,HttpSession session)
 	{
 		user=userDAO.validate(user.getEmailId(), user.getPassword());
+		
 		if(user==null)
 		{
 			return new ResponseEntity("Invalid Username and Password", HttpStatus.NOT_FOUND);
 		}
 		else
 		{
-			//session.setAttribute("username",user.getEmailId());
+			session.setAttribute("username",user.getEmailId());
 			return new ResponseEntity<User>(user,HttpStatus.OK);
 		}
 	}
@@ -90,6 +93,7 @@ public class UserController {
 	{
 		String username=(String)session.getAttribute("username");
 		if(username!=null)
+			
 		{
 			session.invalidate();
 			return new ResponseEntity("Logout Successfull.",HttpStatus.OK);
