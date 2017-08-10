@@ -10,5 +10,7 @@ public interface UserDao {
 	public User get(String id);
 	public List<User> list();
 	public User validate(String id,String password);
+	
+	//Whey this method.  You have get and validate methods.
 	public boolean isUserExist(User user);
 }
