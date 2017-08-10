@@ -31,6 +31,7 @@ import com.stackroute.activitystream.model.User;
 @EnableWebMvc
 public class UserController {
 	
+	//Why not private variables?
 	@Autowired
 	 UserDao userDAO;
 
@@ -57,7 +58,7 @@ public class UserController {
 		if (userDAO.get(user.getEmailId()) == null) {
 			return new ResponseEntity<Object>("No User found for ID "+user.getEmailId(), HttpStatus.NOT_FOUND);
 		}
-
+//which user you are returning?  This may be null.
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
@@ -67,12 +68,14 @@ public class UserController {
 
 		if(userDAO.isUserExist(user))
 		{
+			//IT should not be not found, you can say conflicts
 			return new ResponseEntity(user.getEmailId()+" already Exist.", HttpStatus.NOT_FOUND);
 		}
 		userDAO.save(user);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 		
 	}
+	//This method should return all the details of user home.  Not just valid OR invalid
 	@RequestMapping(value="/authenticate",method=RequestMethod.POST)
 	public ResponseEntity<User> authenticateUser(@RequestBody User user,HttpSession session)
 	{
